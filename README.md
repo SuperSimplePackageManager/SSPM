@@ -9,6 +9,9 @@ a super simple package manager.
 Options add clutter. All you do is add what packages
 you want to install, and they can be installed.
 
+Installing a package: `sudo sspm install <package>`
+Removing a package: `sudo sspm remove <package>`
+
 ## Why does SSPM just auto install the package?
 Because it adds an extra step, which isn't super
 simple.
