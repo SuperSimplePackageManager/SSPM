@@ -1,0 +1,54 @@
+#!/usr/bin/bash
+set -e
+export CWD=$(pwd)
+export REPO="https://raw.githubusercontent.com/SuperSimplePackageManager/packages/main/"
+export SSPM_DIR=/usr/local/sspm
+export ACTION="NONE"
+
+check_sspm_foler(){
+    if [ ! -d ${SSPM_DIR} ]; then
+        mkdir -pv ${SSPM_DIR}
+    fi
+}
+
+install_package(){
+    . ${PACKAGE}.sspm
+    mkdir -p ${PACKAGE}-src 
+    cd ${SSPM_DIR}/${PACKAGE}-src 
+    wget -q ${source}
+    if [ ${format} == "tar" ]; then
+        tar xvf *.tar.* &>/dev/null
+    elif [ ${format} == "zip" ]; then
+        unzip *.zip
+    fi
+    cd ${SSPM_DIR}/${PACKAGE}-src/
+    cp -r */. . &>/dev/null
+    ${PACKAGE} ${ACTION} &>/dev/null
+    cd ${SSPM_DIR}
+    rm -rf ${PACKAGE}*
+    echo "Done!"
+}
+
+for PACKAGE in $*
+do
+    if [ "${PACKAGE}" == "install" ]; then
+        export ACTION="INSTALL"
+    elif [ "${PACKAGE}" == "remove" ]; then
+        export ACTION="REMOVE"
+    elif [ ! -f ${CWD}/${PACKAGE}.sspm ]; then
+        echo "Installing ${PACKAGE} from repo"
+        check_sspm_foler
+        cd ${SSPM_DIR}
+        rm -rf ${PACKAGE}*
+        wget -q ${REPO}/${PACKAGE}.sspm
+        install_package
+    else
+        echo "Installing ${CWD}/${PACKAGE}.sspm"
+        check_sspm_foler
+        cd ${SSPM_DIR}
+        rm -rf ${PACKAGE}*
+        cd ${CWD}
+        cp ${CWD}/${PACKAGE}.sspm ${SSPM_DIR}/${PACKAGE}.sspm
+        install_package
+    fi
+done
