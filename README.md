@@ -3,7 +3,7 @@
 
 ---
 
-## How simple is sspm? 
+## How simple is spm? 
 #### spm is arguably too simple, and that's the point.
 The intended design is to be brutally simple
 
