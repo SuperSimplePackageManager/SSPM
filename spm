@@ -16,11 +16,13 @@ install_package(){
     mkdir -p ${PACKAGE}-src 
     cd ${spm_DIR}/${PACKAGE}-src
     wget -q ${source}
-    if [ ${format} == "tar" ]; then
-        tar xvf *.tar.* &>/dev/null
-    elif [ ${format} == "zip" ]; then
-        unzip *.zip
+
+    if [ ${format} == "bz2" ]; then
+        tar xvf *.bz2 &>/dev/null
+    elif [ ${format} == "xz" ]; then
+        tar xvf *.xz &>/dev/null
     fi
+
     cd ${spm_DIR}/${PACKAGE}-src/
     cp -r */. . &>/dev/null
     ${PACKAGE} ${ACTION} &>/dev/null
